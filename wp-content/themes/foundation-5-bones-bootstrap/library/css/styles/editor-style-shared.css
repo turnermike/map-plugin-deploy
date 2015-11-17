@@ -1,0 +1,15 @@
+/* ==========================================================================
+   Custom Styles Used via TinyMCE Editor
+   - styles defined using plugin, edit under Settings > TinyMCE prof. Styles
+   ========================================================================== */
+/* line 5, ../../scss/styles/editor-style-shared.scss */
+.intro-copy {
+  font-size: 1.2em;
+  line-height: 1.3em;
+}
+
+/* line 6, ../../scss/styles/editor-style-shared.scss */
+.disclaimer {
+  font-size: .8em;
+  line-height: .9em;
+}

@@ -1,0 +1,11 @@
+# ignore all instances of the following
+*.DS_Store
+error_log
+*/error_log/*
+
+# SASS
+**/.sass-cache
+**/.sass-cache/*
+
+# Wordpress
+wp-content/debug.log

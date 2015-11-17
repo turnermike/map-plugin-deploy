@@ -1,0 +1,7 @@
+/* download custom field */
+/* line 2, ../../scss/styles/admin.scss */
+.wp-admin .download-select {
+  width: 100%;
+}
+
+/* metaboxes are hidden via functions.php - remove_meta_boxes() */
