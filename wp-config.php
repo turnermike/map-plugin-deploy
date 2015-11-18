@@ -1,4 +1,10 @@
 <?php
+
+// BEGIN iThemes Security - Do not modify or remove this line
+// iThemes Security Config Details: 2
+define( 'DISALLOW_FILE_EDIT', true ); // Disable File Editor - Security > Settings > WordPress Tweaks > File Editor
+// END iThemes Security - Do not modify or remove this line
+
 /**
  * The base configurations of the WordPress.
  *
@@ -92,14 +98,14 @@ define('WP_MEMORY_LIMIT', '64M');
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         'put your unique phrase here');
-define('SECURE_AUTH_KEY',  'put your unique phrase here');
-define('LOGGED_IN_KEY',    'put your unique phrase here');
-define('NONCE_KEY',        'put your unique phrase here');
-define('AUTH_SALT',        'put your unique phrase here');
-define('SECURE_AUTH_SALT', 'put your unique phrase here');
-define('LOGGED_IN_SALT',   'put your unique phrase here');
-define('NONCE_SALT',       'put your unique phrase here');
+define('AUTH_KEY',         '|pzj;ApF&Lo`@(B`RG+%3?oCwsp-N/[DnlNeM3KqaY]#FoK_VvZku#NQ:3yG1l`#');
+define('SECURE_AUTH_KEY',  'wj*9@q[@$#Ng{=}JgPUAp>%iXbOlnl+Kv5f>);7W5h2U;S|/<LxiFar}c6ap^[Z?');
+define('LOGGED_IN_KEY',    'S5:zX0-p7L9Y}0V-/*|D(is_#t RgYPYqI=@>6{1dYm:k7$iN5Lu@4dO_c;}1GO^');
+define('NONCE_KEY',        '$yR9;Fw,}I{ac3iQvU`,k#J<^A_E7yiIWZdO;AJ)9x)~[|ohK+cUZMOC!y7FW%#f');
+define('AUTH_SALT',        'C^Tte}b@m_L @ZhkKk5,WfyvE:1[8B;/fLrjAs_NbuM$*U[p4RlnXKI]C,@/w5,C');
+define('SECURE_AUTH_SALT', 'cmMDEv%GPoiu8>KzLVM,;(-u$Ws?onArz@U4>w/JLf3ga FMV&HNYq7A@[z] 0ey');
+define('LOGGED_IN_SALT',   'zZ}t-[2t:sA<s6G#K@n>|)v37UR6gW;Gh)Z|8oj0HJUZb[zM0NHRu2g{jYVqhNWo');
+define('NONCE_SALT',       'uie{woP3Y,p0-P?I{F+j>:?dRTtY:$@m_&ag:Q`RM+duAc3pIPzCIxF+%ZK9Bj)l');
 
 /**#@-*/
 
@@ -109,7 +115,7 @@ define('NONCE_SALT',       'put your unique phrase here');
  * You can have multiple installations in one database if you give each a unique
  * prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix  = 'wp_';
+$table_prefix  = 'uxaum8qyy_';
 
 /**
  * For developers: WordPress debugging mode.
