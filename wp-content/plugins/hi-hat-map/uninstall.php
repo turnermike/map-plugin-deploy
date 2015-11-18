@@ -1,8 +1,8 @@
 <?php
 /**
- * Hi-hat Related Downloads
+ * Hi-hat Map
  *
- * @package   Hi_Hat_Related_Downloads
+ * @package   Hi_Hat_Map
  * @author    Mike Turner <turner.mike@gmail.com>
  * @license   GPL-2.0+
  * @link      http://hi-hatconsulting.com

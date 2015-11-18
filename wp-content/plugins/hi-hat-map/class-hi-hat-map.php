@@ -1,20 +1,20 @@
 <?php
 /**
- * Hi-hat Related Downloads
+ * Hi-hat Map
  *
- * @package   Hi_Hat_Related_Downloads
+ * @package   Hi_Hat_Map
  * @author    Mike Turner <turner.mike@gmail.com>
  * @license   GPL-2.0+
  * @link      http://hi-hatconsulting.com
  * @copyright 2014 Hi-hat Consulting
  */
 
-class Hi_Hat_Related_Downloads_Widget extends WP_Widget{
+class Hi_Hat_Map_Widget extends WP_Widget{
 
 	//constructor
-	function Hi_Hat_Related_Downloads_Widget(){
+	function Hi_Hat_Map_Widget(){
 
-		parent::WP_Widget(false, $name = __('Hi-hat Related Downloads', 'Hi_Hat_Related_Downloads_Widget'));
+		parent::WP_Widget(false, $name = __('Hi-hat Map', 'Hi_Hat_Map_Widget'));
 
 	}
 
@@ -38,19 +38,19 @@ class Hi_Hat_Related_Downloads_Widget extends WP_Widget{
 		?>
 
 		<p>
-		<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title', 'Hi_Hat_Related_Downloads_Widget'); ?></label>
+		<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title', 'Hi_Hat_Map_Widget'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 		</p>
 		<p>
-		<label for="<?php echo $this->get_field_id('post_qty'); ?>"><?php _e('Post Quantity', 'Hi_Hat_Related_Downloads_Widget'); ?></label>
+		<label for="<?php echo $this->get_field_id('post_qty'); ?>"><?php _e('Post Quantity', 'Hi_Hat_Map_Widget'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('post_qty'); ?>" name="<?php echo $this->get_field_name('post_qty'); ?>" type="text" value="<?php echo $post_qty; ?>" />
 		</p>
 		<p>
-		<label for="<?php echo $this->get_field_id('description'); ?>"><?php _e(' Description', 'Hi_Hat_Related_Downloads_Widget'); ?></label>
+		<label for="<?php echo $this->get_field_id('description'); ?>"><?php _e(' Description', 'Hi_Hat_Map_Widget'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('description'); ?>" name="<?php echo $this->get_field_name('description'); ?>" type="text" value="<?php echo $description; ?>" />
 		</p>
 
-		<p>This widget will display downloads added to the Related Downloads Content Type by using the Related Downloads Tags to establish a relation ship. Post Quantity and Description fields are not required. </p>
+		<!-- <p>This widget will display downloads added to the Related Downloads Content Type by using the Related Downloads Tags to establish a relation ship. Post Quantity and Description fields are not required. </p> -->
 
 		<?php
 	}
@@ -70,21 +70,21 @@ class Hi_Hat_Related_Downloads_Widget extends WP_Widget{
 	//widget display
 	function widget($args, $instance){
 
-		echo Hi_Hat_Related_Downloads::output_view(NULL, $instance, $args);
+		echo Hi_Hat_Map::output_view(NULL, $instance, $args);
 	}
 
 }
 
-add_action('widgets_init', create_function('', 'return register_widget("Hi_Hat_Related_Downloads_Widget");'));
+// add_action('widgets_init', create_function('', 'return register_widget("Hi_Hat_Map_Widget");'));
 
 
 
 
 /**
- * @package Hi_Hat_Related_Downloads
+ * @package Hi_Hat_Map
  * @author  Your Name <email@example.com>
  */
-class Hi_Hat_Related_Downloads {
+class Hi_Hat_Map {
 
 	/**
 	 * Plugin version, used for cache-busting of style and script file references.
@@ -108,7 +108,7 @@ class Hi_Hat_Related_Downloads {
 	 *
 	 * @var      string
 	 */
-	protected $plugin_slug = 'hi-hat-related-downloads';
+	protected $plugin_slug = 'hi-hat-map';
 
 	/**
 	 * Instance of this class.
@@ -141,7 +141,7 @@ class Hi_Hat_Related_Downloads {
 		add_action( 'save_post', array($this, 'hihat_save_meta_boxes' ) );
 
 		// shortcodes
-		add_shortcode( 'hihat_related_downloads', array( $this, 'hihat_related_downloads_handler' ) );
+		add_shortcode( 'hihat_map', array( $this, 'hihat_map_handler' ) );
 
 	}
 
@@ -153,7 +153,9 @@ class Hi_Hat_Related_Downloads {
 	 * @return    Plugin slug variable.
 	 */
 	public function get_plugin_slug() {
+
 		return $this->plugin_slug;
+
 	}
 
 	/**
@@ -303,11 +305,11 @@ class Hi_Hat_Related_Downloads {
 		load_textdomain( $domain, trailingslashit( WP_LANG_DIR ) . $domain . '/' . $domain . '-' . $locale . '.mo' );
 		load_plugin_textdomain( $domain, FALSE, basename( plugin_dir_path( dirname( __FILE__ ) ) ) . '/languages/' );
 
-		register_post_type( 'related_download',
+		register_post_type( 'map_location',
 		array(
 		  'labels' => array(
-		    'name' => __( 'Related Downloads' ),
-		    'singular_name' => __( 'Related Download' ),
+		    'name' => __( 'Map Locations' ),
+		    'singular_name' => __( 'Map Location' ),
 		  ),
 		  'public' => true,
 		  'has_archive' => true,
@@ -317,12 +319,12 @@ class Hi_Hat_Related_Downloads {
 		);
 
 		register_taxonomy(
-			'related_download_tag',
+			'map_location_type',
 			// array('related_download', 'post', 'page'),
 			get_post_types(),
 			array(
-				'label' => __( 'Related Download Tags' ),
-				'rewrite' => array( 'slug' => 'related_download_tag' ),
+				'label' => __( 'Map Location Type' ),
+				'rewrite' => array( 'slug' => 'map_location_type' ),
 			)
 		);
 
@@ -331,10 +333,10 @@ class Hi_Hat_Related_Downloads {
 	public function hihat_add_meta_boxes(){
 
         add_meta_box(
-            'related_download',
-            __( 'The Download', 'hi-hat-related-downloads' ),
+            'map_location',
+            __( 'Map Location', 'hi-hat-map' ),
             array( $this, 'hihat_add_meta_boxes_callback' ),
-            'related_download',
+            'map_location',
             'normal'
         );
 
@@ -385,15 +387,15 @@ class Hi_Hat_Related_Downloads {
 		wp_enqueue_script('thickbox');
 
 		wp_enqueue_media();
-		wp_enqueue_script( 'image-widget', plugins_url('/js/hi-hat-related-downloads.js', __FILE__), array( 'jquery', 'media-upload', 'media-views' ), self::VERSION );
-		wp_localize_script( 'hi-hat-related-downloads', 'imageWidget', array(
+		wp_enqueue_script( 'image-widget', plugins_url('/js/hi-hat-map.js', __FILE__), array( 'jquery', 'media-upload', 'media-views' ), self::VERSION );
+		wp_localize_script( 'hi-hat-map', 'imageWidget', array(
 			'frame_title' => __( 'Select an Image', 'image_widget' ),
 			'button_title' => __( 'Insert Into Widget', 'image_widget' ),
 		) );
 
 	}
 
-    public function hihat_related_downloads_handler($attributes) {
+    public function hihat_map_handler($attributes) {
 
         //get optional attributes and assign default values if not present
         extract( shortcode_atts( array(

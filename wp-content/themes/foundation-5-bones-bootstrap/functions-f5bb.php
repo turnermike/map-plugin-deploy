@@ -99,18 +99,18 @@ if(is_admin()){
      * @global $post Wordpress post object.
      *
      */
-    function f5bb_remove_meta_boxes(){
-        global $post;
-        $boxes = array(
-          array( 'id' => 'wpcf-marketing', 'context' => 'side' ),
-          array( 'id' => 'revisionsdiv', 'context' => 'normal' ),
-        );
-        $post_type = get_post_type($post->ID);
-        foreach($boxes as $box){
-          remove_meta_box($box['id'], $post_type, $box['context']);
-        }
-    }
-    add_action('admin_head', 'f5bb_remove_meta_boxes');
+    // function f5bb_remove_meta_boxes(){
+    //     global $post;
+    //     $boxes = array(
+    //       array( 'id' => 'wpcf-marketing', 'context' => 'side' ),
+    //       array( 'id' => 'revisionsdiv', 'context' => 'normal' ),
+    //     );
+    //     $post_type = get_post_type($post->ID);
+    //     foreach($boxes as $box){
+    //       remove_meta_box($box['id'], $post_type, $box['context']);
+    //     }
+    // }
+    // add_action('admin_head', 'f5bb_remove_meta_boxes');
 
 
     /**
@@ -130,18 +130,18 @@ if(is_admin()){
         /**
          * Remove Meta Boxes
          */
-        // featured image box (default wp meta box)
-        remove_meta_box('postimagediv', 'page', 'side');
-        // featured video box (plugin meta box)
-        $featured_video_box = $wp_meta_boxes[$post->post_type]['side']['core']['featured_video_plus-box'];
-        unset($wp_meta_boxes[$post->post_type]['side']['core']['featured_video_plus-box']);
+        // // featured image box (default wp meta box)
+        // remove_meta_box('postimagediv', 'page', 'side');
+        // // featured video box (plugin meta box)
+        // $featured_video_box = $wp_meta_boxes[$post->post_type]['side']['core']['featured_video_plus-box'];
+        // unset($wp_meta_boxes[$post->post_type]['side']['core']['featured_video_plus-box']);
         /**
          * Add Meta Boxes
          */
-        // featured image
-        add_meta_box('postimagediv', __('Featured Image', 'f5bb'), 'post_thumbnail_meta_box', 'page', 'side', 'core');
-        // featured video
-        $wp_meta_boxes[$post->post_type]['side']['core']['featured_video_plus-box'] = $featured_video_box;
+        // // featured image
+        // add_meta_box('postimagediv', __('Featured Image', 'f5bb'), 'post_thumbnail_meta_box', 'page', 'side', 'core');
+        // // featured video
+        // $wp_meta_boxes[$post->post_type]['side']['core']['featured_video_plus-box'] = $featured_video_box;
 
     }
     add_action('admin_head', 'f5bb_reposition_meta_boxes');
