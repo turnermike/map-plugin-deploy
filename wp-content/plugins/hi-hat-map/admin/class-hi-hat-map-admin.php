@@ -57,6 +57,8 @@ class hi_hat_map_Admin {
 
 		add_action('admin_menu', array($this, 'add_to_menu'));
 
+		add_action('admin_init', array($this, 'build_fields'));
+
 	}
 
 
@@ -100,7 +102,7 @@ class hi_hat_map_Admin {
 			'manage_options',
 			'hi-hat-map/admin/partials/settings.php',
 			// 'hi_hat_locations_form',
-			array($this, 'hi_hat_locations_form_page_handler')
+			array($this, 'hi_hat_map_settings_page')
 		);
 
 	}
@@ -111,199 +113,59 @@ class hi_hat_map_Admin {
 
 
 
+	public function hi_hat_map_settings_page(){
+?>
 
-	/**
-	 * Form page handler checks is there some data posted and tries to save it
-	 * Also it renders basic wrapper in which we are callin meta box render
-	 */
-	function hi_hat_locations_form_page_handler()
-	{
-	    global $wpdb;
-	    $table_name = $wpdb->prefix . 'hi_hat_map_settings'; // do not forget about tables prefix
-
-	    $message = '';
-	    $notice = '';
-
-	    // // this is default $item which will be used for new records
-	    // $default = array(
-	    //     'id' => 0,
-	    //     'option_name' => '',
-	    //     'option_value' => '',
-	    //     'date_modified' => date('Y-m-d H:i:s'),
-	    // );
-
-	    $default = array(
-	        'mapboxAPIKey' => '',
-	        'date_modified' => date('Y-m-d H:i:s'),
-	    );
-
-	    // here we are verifying does this request is post back and have correct nonce
-	    if (wp_verify_nonce($_REQUEST['nonce'], basename(__FILE__))) {
-
-	        // combine our default item with request params
-	        $item = shortcode_atts($default, $_REQUEST);
-
-	        // validate data, and if all ok save item to database
-	        // if id is zero insert otherwise update
-	        $item_valid = $this->hi_hat_map_validate_setting($item);
-
-	        if ($item_valid === true) {
-
-	            if ($item['id'] == 0) {
-
-	                $result = $wpdb->insert($table_name, $item);
-
-	                echo "<pre>";
-	                var_dump($item);
-	                echo "</pre>";
-
-	                $item['id'] = $wpdb->insert_id;
-
-	                if ($result) {
-	                    $message = __('Item was successfully saved', 'hi_hat_map');
-	                } else {
-	                    $notice = __('There was an error while saving item', 'hi_hat_map');
-	                }
-
-	            } else {
-
-	                $result = $wpdb->update($table_name, $item, array('id' => $item['id']));
-	                if ($result) {
-	                    $message = __('Item was successfully updated', 'hi_hat_map');
-	                } else {
-	                    $notice = __('There was an error while updating item', 'hi_hat_map');
-	                }
-	            }
-
-	        } else {
-
-	            // if $item_valid not true it contains error message(s)
-	            $notice = $item_valid;
-
-	        }
-	    }
-	    else {
-	        // if this is not post back we load item to edit or give new one to create
-	        $item = $default;
-	        if (isset($_REQUEST['id'])) {
-	            $item = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %d", $_REQUEST['id']), ARRAY_A);
-	            if (!$item) {
-	                $item = $default;
-	                $notice = __('Item not found', 'hi_hat_map');
-	            }
-	        }
-	    }
-
-	    // here we adding our custom meta box
-	    add_meta_box('persons_form_meta_box', 'Location Data', array($this, 'hi_hat_map_form_meta_box_handler'), 'person', 'normal', 'default');
-
-	    ?>
-
-		<div class="wrap">
-		    <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
-		    <h2><?php _e('Hi-hat Map Settings', 'hi_hat_map')?>
-		    	<a class="add-new-h2" href="<?php echo get_admin_url(get_current_blog_id(), 'admin.php?page=hi-hat-map%2Fadmin');?>"><?php _e('back to list', 'hi_hat_map')?></a>
-		    </h2>
-
-		    <?php if (!empty($notice)): ?>
-		    <div id="notice" class="error"><p><?php echo $notice ?></p></div>
-		    <?php endif;?>
-		    <?php if (!empty($message)): ?>
-		    <div id="message" class="updated"><p><?php echo $message ?></p></div>
-		    <?php endif;?>
-
-		    <form id="form" method="POST">
-		        <input type="hidden" name="nonce" value="<?php echo wp_create_nonce(basename(__FILE__))?>"/>
-		        <?php /* NOTICE: here we storing id to determine will be item added or updated */ ?>
-		        <input type="hidden" name="id" value="<?php echo $item['id'] ?>"/>
-
-		        <div class="metabox-holder" id="poststuff">
-		            <div id="post-body">
-		                <div id="post-body-content">
-		                    <?php /* And here we call our custom meta box */ ?>
-		                    <?php do_meta_boxes('person', 'normal', $item); ?>
-		                    <input type="submit" value="<?php _e('Save', 'hi_hat_map')?>" id="submit" class="button-primary" name="submit">
-		                </div>
-		            </div>
-		        </div>
-		    </form>
+		<div class="hi-hat-map-settings">
+			<h1>Settings</h1>
+			<form method="post" action="options.php" enctype="multipart/form-data">
+				<?php
+					settings_fields('hi_hat_map_settings');
+					do_settings_sections(__FILE__);
+					// submit_button();
+				?>
+				<input type="submit" name="submit" class="button-primary" value="<?= esc_attr_e('Save Changes'); ?>" />
+			</form>
 		</div>
-	<?php
+
+
+
+<?php
 	}
 
+	public function build_fields(){
 
+		register_setting('hi_hat_map_settings', 'hi_hat_map_settings', array($this, 'validate_settings'));
+		add_settings_section('general_settings', 'Administration Settings', array($this, 'section_general'), __FILE__);
 
-	/**
-	 * This function renders our custom meta box
-	 * $item is row
-	 *
-	 * @param $item
-	 */
-	public function hi_hat_map_form_meta_box_handler($item)
-	{
-	    ?>
-
-	<table cellspacing="2" cellpadding="5" style="width: 100%;" class="form-table">
-	    <tbody>
-	    <tr class="form-field">
-	        <th valign="top" scope="row">
-	            <label for="mapboxAPIKey"><?php _e('Mapbox API Key', 'hi_hat_map')?></label>
-	        </th>
-	        <td>
-	            <input id="mapboxAPIKey" name="mapboxAPIKey" type="text" style="width: 95%" value="<?php echo esc_attr($item['mapboxAPIKey'])?>"
-	                   size="50" class="code" placeholder="<?php _e('Mapbox API Key', 'hi_hat_map')?>" required>
-	        </td>
-	    </tr>
-	    <!--
-	    <tr class="form-field">
-	        <th valign="top" scope="row">
-	            <label for="email"><?php _e('E-Mail', 'hi_hat_map')?></label>
-	        </th>
-	        <td>
-	            <input id="email" name="email" type="email" style="width: 95%" value="<?php echo esc_attr($item['email'])?>"
-	                   size="50" class="code" placeholder="<?php _e('Your E-Mail', 'hi_hat_map')?>" required>
-	        </td>
-	    </tr>
-	    <tr class="form-field">
-	        <th valign="top" scope="row">
-	            <label for="age"><?php _e('Age', 'hi_hat_map')?></label>
-	        </th>
-	        <td>
-	            <input id="age" name="age" type="number" style="width: 95%" value="<?php echo esc_attr($item['age'])?>"
-	                   size="50" class="code" placeholder="<?php _e('Your age', 'hi_hat_map')?>" required>
-	        </td>
-	    </tr>
-	    -->
-	    </tbody>
-	</table>
-	<?php
 	}
 
+	public function section_general(){
 
-	/**
-	 * Simple function that validates data and retrieve bool on success
-	 * and error message(s) on error
-	 *
-	 * @param $item
-	 * @return bool|string
-	 */
-	function hi_hat_map_validate_setting($item)
-	{
-	    $messages = array();
+		add_settings_field('mapbox_api_key', __('Mapbox API Key', 'hi_hat_map'), array($this, 'mapbox_api_key'), __FILE__, 'general_settings', array('class' => 'regular-text'));
 
-	    echo "<pre>";
-	    var_dump($item);
-	    echo "</pre>";
+	}
 
-	    if (empty($item['mapboxAPIKey'])) $messages[] = __('Mapbox API Key is required.', 'hi_hat_map');
-	    // if (!empty($item['email']) && !is_email($item['email'])) $messages[] = __('E-Mail is in wrong format', 'hi_hat_map');
-	    // if (!ctype_digit($item['age'])) $messages[] = __('Age in wrong format', 'hi_hat_map');
-	    // if(!empty($item['age']) && !absint(intval($item['age'])))  $messages[] = __('Age can not be less than zero');
-	    // if(!empty($item['age']) && !preg_match('/[0-9]+/', $item['age'])) $messages[] = __('Age must be number');
-	    // ...
+	public function validate_settings($hi_hat_map_settings){
 
-	    if (empty($messages)) return true;
-	    return implode('<br />', $messages);
+		$hi_hat_map_settings['mapbox_api_key'] = trim($hi_hat_map_settings['mapbox_api_key']);
+
+		return $hi_hat_map_settings;
+
+	}
+
+	public function mapbox_api_key(){
+
+        $options = get_option('hi_hat_map_settings');
+
+        echo "<pre>";
+        var_dump($options);
+        echo "</pre>";
+
+        $val = '';
+        if(isset($options['mapbox_api_key'])){ $val = $options['mapbox_api_key']; }
+        echo "<input name='hi_hat_map_settings[mapbox_api_key]' type='text' value='$val' placeholder='" . __('Enter Mapbox URL', 'hi_hat_map') . "' class='regular-text' />";
+
 	}
 
 
@@ -337,6 +199,14 @@ class hi_hat_map_Admin {
 
 
 
+
+
+
+
+
+
+
+	// adds a menu item to the settings menu
 	// public function add_menu_item(){
 	// 	add_options_page( 'My Plugin Options', 'My Plugin', 'manage_options', 'my-unique-identifier', array($this, 'my_plugin_options') );
 	// }
