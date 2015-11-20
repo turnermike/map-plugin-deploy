@@ -52,24 +52,94 @@ class hi_hat_map_Admin {
 		$this->hi_hat_map = $hi_hat_map;
 		$this->version = $version;
 
-		add_action('admin_menu', array($this, 'add_menu_item'));
+		// add item to settings menu
+		// add_action('admin_menu', array($this, 'add_menu_item'));
+
+		add_action('admin_menu', array($this, 'add_to_menu'));
+
+	}
+
+
+	public function add_to_menu(){
+
+		add_menu_page(
+			'',
+			'Locations Map ',
+			'manage_options',
+			'hi-hat-map/admin/partials/locations.php',
+			'',
+			'dashicons-location-alt',
+			11
+		);
+
+		// rename first menu item from 'Locations Map' to 'Edit Locations'
+		add_submenu_page(
+			'hi-hat-map/admin/partials/locations.php',
+			'Edit Locations',
+			'Edit Locations',
+			'manage_options',
+			'hi-hat-map/admin/partials/locations.php',
+			''
+		);
+
+		// add 'Add Locations' menu item
+		add_submenu_page(
+			'hi-hat-map/admin/partials/locations.php',
+			'Add Location',
+			'Add Location',
+			'manage_options',
+			'hi-hat-map/admin/partials/add_location.php',
+			''
+		);
+
+		// add 'Settings' menu item
+		add_submenu_page(
+			'hi-hat-map/admin/partials/locations.php',
+			'Settings',
+			'Settings',
+			'manage_options',
+			'hi-hat-map/admin/partials/settings.php',
+			''
+		);
 
 	}
 
 
 
-	public function add_menu_item(){
-		add_options_page( 'My Plugin Options', 'My Plugin', 'manage_options', 'my-unique-identifier', array($this, 'my_plugin_options') );
-	}
 
-	public function my_plugin_options() {
-		if ( !current_user_can( 'manage_options' ) )  {
-			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
-		}
-		echo '<div class="wrap">';
-		echo '<p>Here is where the form would go if I actually had options.</p>';
-		echo '</div>';
-	}	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// public function add_menu_item(){
+	// 	add_options_page( 'My Plugin Options', 'My Plugin', 'manage_options', 'my-unique-identifier', array($this, 'my_plugin_options') );
+	// }
+
+	// public function my_plugin_options() {
+	// 	if ( !current_user_can( 'manage_options' ) )  {
+	// 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+	// 	}
+	// 	echo '<div class="wrap">';
+	// 	echo '<p>Here is where the form would go if I actually had options.</p>';
+	// 	echo '</div>';
+	// }
+
+
+
+
+
+
+
 
 
 	/**
