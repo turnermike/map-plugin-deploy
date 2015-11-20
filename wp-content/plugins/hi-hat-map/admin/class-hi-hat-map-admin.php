@@ -52,7 +52,25 @@ class hi_hat_map_Admin {
 		$this->hi_hat_map = $hi_hat_map;
 		$this->version = $version;
 
+		add_action('admin_menu', array($this, 'add_menu_item'));
+
 	}
+
+
+
+	public function add_menu_item(){
+		add_options_page( 'My Plugin Options', 'My Plugin', 'manage_options', 'my-unique-identifier', array($this, 'my_plugin_options') );
+	}
+
+	public function my_plugin_options() {
+		if ( !current_user_can( 'manage_options' ) )  {
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		}
+		echo '<div class="wrap">';
+		echo '<p>Here is where the form would go if I actually had options.</p>';
+		echo '</div>';
+	}	
+
 
 	/**
 	 * Register the stylesheets for the admin area.
@@ -101,3 +119,8 @@ class hi_hat_map_Admin {
 	}
 
 }
+
+
+
+
+
