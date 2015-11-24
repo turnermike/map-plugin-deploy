@@ -142,35 +142,62 @@ class hi_hat_map_Admin {
 
 	public function section_general(){
 
-		add_settings_field('mapbox_api_key', __('Mapbox API Key', 'hi_hat_map'), array($this, 'mapbox_api_key'), __FILE__, 'general_settings', array('class' => 'regular-text'));
+		add_settings_field(
+			'mapbox_access_token',
+			__('Mapbox Access Token', 'hi_hat_map'),
+			array($this, 'mapbox_access_token'),
+			__FILE__,
+			'general_settings',
+			array('class' => 'regular-text')
+		);
+
+		add_settings_field(
+			'mapbox_style_url',
+			__('Mapbox Style URL', 'hi_hat_map'),
+			array($this, 'mapbox_style_url'),
+			__FILE__,
+			'general_settings',
+			array('class' => 'small-text')
+		);
+
+
+		// debug
+		$options = get_option('hi_hat_map_settings');
+        echo "<pre>";
+        var_dump($options);
+        echo "</pre>";
 
 	}
 
 	public function validate_settings($hi_hat_map_settings){
 
-		$hi_hat_map_settings['mapbox_api_key'] = trim($hi_hat_map_settings['mapbox_api_key']);
+		$hi_hat_map_settings['mapbox_access_token'] = trim($hi_hat_map_settings['mapbox_access_token']);
+		$hi_hat_map_settings['mapbox_style_url'] = trim($hi_hat_map_settings['mapbox_style_url']);
 
 		return $hi_hat_map_settings;
 
 	}
 
-	public function mapbox_api_key(){
+	public function mapbox_access_token(){
 
         $options = get_option('hi_hat_map_settings');
-
-        echo "<pre>";
-        var_dump($options);
-        echo "</pre>";
-
         $val = '';
-        if(isset($options['mapbox_api_key'])){ $val = $options['mapbox_api_key']; }
-        echo "<input name='hi_hat_map_settings[mapbox_api_key]' type='text' value='$val' placeholder='" . __('Enter Mapbox URL', 'hi_hat_map') . "' class='regular-text' />";
+        if(isset($options['mapbox_access_token'])){ $val = $options['mapbox_access_token']; }
+        echo "<input name='hi_hat_map_settings[mapbox_access_token]' type='text' value='$val' placeholder='" . __('Enter Mapbox URL', 'hi_hat_map') . "' class='large-text' />";
+
+	}
+
+	public function mapbox_style_url(){
+
+        $options = get_option('hi_hat_map_settings');
+        $val = '';
+        if(isset($options['mapbox_style_url'])){ $val = $options['mapbox_style_url']; }
+        echo "<input name='hi_hat_map_settings[mapbox_style_url]' type='text' value='$val' placeholder='" . __('Enter Map ID', 'hi_hat_map') . "' class='large-text' />";
 
 	}
 
 
-
-
+//mapbox://styles/leatherface416/cihcp99on00d44llzrpy3wohu
 
 
 
