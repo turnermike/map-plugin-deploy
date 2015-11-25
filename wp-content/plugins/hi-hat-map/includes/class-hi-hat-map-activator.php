@@ -32,31 +32,30 @@ class hi_hat_map_Activator {
 	public static function activate() {
 
         global $wpdb;
+        global $custom_table_example_db_version;
 
+        $table_name = $wpdb->prefix . 'hi_hat_map_locations';
+
+        // sql to create your table
+        // NOTICE that:
+        // 1. each field MUST be in separate line
+        // 2. There must be two spaces between PRIMARY KEY and its name
+        //    Like this: PRIMARY KEY[space][space](id)
+        // otherwise dbDelta will not work
+        $sql = "CREATE TABLE " . $table_name . " (
+          id bigint(20) NOT NULL AUTO_INCREMENT,
+          name tinytext NOT NULL,
+          contact_email VARCHAR(100) NOT NULL,
+          age int(11) NULL,
+          PRIMARY KEY  (id)
+        );";
+
+        // we do not execute sql directly
+        // we are calling dbDelta which cant migrate database
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
 
-        $table_name = $wpdb->prefix . 'hi_hat_map_settings';
 
-        $sql = "CREATE TABLE $table_name (
-                id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-                option_name VARCHAR(64) DEFAULT '' NOT NULL,
-                option_value LONGTEXT DEFAULT '' NOT NULL,
-                date_modified datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-                PRIMARY KEY  (id)
-            );";
-
-        // $sql = "CREATE TABLE $table_name (
-        //     id mediumint(9) NOT NULL AUTO_INCREMENT,
-        //     name varchar(64) NOT NULL,
-        //     value longtext NOT NULL,
-        //     date_modified datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-        //     UNIQUE KEY id (id)
-        // ) $charset_collate;";
-
-        dbDelta( $sql );
-
-        // echo $wpdb->last_error;
-        // die();
 
 
 
@@ -64,40 +63,20 @@ class hi_hat_map_Activator {
 
 
         // global $wpdb;
-        // $table_name = $wpdb->prefix . 'hi-hat';
-        // $charset_collate = $wpdb->get_charset_collate();
 
-        // if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
-        //     $sql = "CREATE TABLE $table_name (
-        //         id mediumint(9) NOT NULL AUTO_INCREMENT,
-        //         time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-        //         name tinytext NOT NULL,
-        //         text text NOT NULL,
-        //         url varchar(55) DEFAULT '' NOT NULL,
-        //         UNIQUE KEY id (id)
-        //     ) $charset_collate;";
-        //     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        //     dbDelta($sql);
+        // require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-        // // echo 'table prefix: ' . $wpdb->prefix; die();
+        // $table_name = $wpdb->prefix . 'hi_hat_map_settings';
 
-        // }else{
-        //     echo 'table exists'; die();
-        // }
+        // $sql = "CREATE TABLE $table_name (
+        //         id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        //         option_name VARCHAR(64) DEFAULT '' NOT NULL,
+        //         option_value LONGTEXT DEFAULT '' NOT NULL,
+        //         date_modified datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+        //         PRIMARY KEY  (id)
+        //     );";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        // dbDelta( $sql );
 
 
 
