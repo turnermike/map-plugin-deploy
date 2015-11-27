@@ -44,10 +44,22 @@ class hi_hat_map_Activator {
         // otherwise dbDelta will not work
         $sql = "CREATE TABLE " . $table_name . " (
           id bigint(20) NOT NULL AUTO_INCREMENT,
-          name tinytext NOT NULL,
-          description varchar(255) NUll,
+          name varchar(100) NOT NULL,
+          description varchar(255) NULL,
+          project_installer varchar(60) NULL,
+          project_installer_url varchar(255) NOT NULL,
+          project_size varchar(60) NULL,
+          project_mounting_system varchar(60) NULL,
+          project_tilt_angle varchar(60) NULL,
+          project_completion_date datetime NULL,
+          image_thumbnail_paths text NULL,
+          image_large_paths text NULL,
+          image_original_paths text NULL,
+          latitude decimal(10,8) NOT NULL,
+          longitude decimal(11, 8) NOT NULL,
+          contact_name varchar(60) NULL,
           contact_email varchar(100) NOT NULL,
-          age int(11) NULL,
+          date_added datetime NOT NULL,
           PRIMARY KEY  (id)
         );";
 
