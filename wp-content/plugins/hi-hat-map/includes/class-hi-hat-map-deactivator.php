@@ -31,6 +31,24 @@ class hi_hat_map_Deactivator {
 	 */
 	public static function deactivate() {
 
+        global $wpdb;
+        global $custom_table_example_db_version;
+
+        $table_name = $wpdb->prefix . 'hi_hat_map_locations';
+
+        // TODO
+        // this will delete the options, add ability for user to set this in plugin settings
+        // delete_option('hi_hat_map_settings');
+
+        $sql = "DROP TABLE IF EXISTS " . $table_name . ";";
+
+        // we do not execute sql directly
+        // we are calling dbDelta which cant migrate database
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        // dbDelta($sql);
+
+        $wpdb->query($sql);
+
 	}
 
 }

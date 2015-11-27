@@ -45,7 +45,8 @@ class hi_hat_map_Activator {
         $sql = "CREATE TABLE " . $table_name . " (
           id bigint(20) NOT NULL AUTO_INCREMENT,
           name tinytext NOT NULL,
-          contact_email VARCHAR(100) NOT NULL,
+          description varchar(255) NUll,
+          contact_email varchar(100) NOT NULL,
           age int(11) NULL,
           PRIMARY KEY  (id)
         );";
